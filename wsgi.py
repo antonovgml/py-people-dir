@@ -3,6 +3,7 @@ from flask_pymongo import PyMongo
 from pprint import pprint
 from peoplegen import get_random_person
 from bson.objectid import ObjectId
+import os
 
 
 app = Flask(__name__)
@@ -10,7 +11,8 @@ app.secret_key = '\x8c\xc3>\x9c\xfb\x1d\x9e[\x1f\x04\x81\x8a\xeb\xc3{Y\xfaI\x0c\
 
 
 #MONGO_URI = 'mongodb://admin:YT%26%21b4aUYH@cluster0-shard-00-00-juobo.mongodb.net:27017,cluster0-shard-00-01-juobo.mongodb.net:27017,cluster0-shard-00-02-juobo.mongodb.net:27017/peopledir?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin'
-MONGO_URI = 'mongodb://admin:Qwerty@10.131.35.106:27017,/peopledir?authSource=admin'
+#MONGO_URI = 'mongodb://admin:Qwerty@10.131.35.106:27017,/peopledir?authSource=admin'
+MONGO_URI = os.environ['OPENSHIFT_NOSQL_DB_URL']
 
 app.config['MONGO_URI'] = MONGO_URI
 
