@@ -10,9 +10,9 @@ app = Flask(__name__)
 app.secret_key = '\x8c\xc3>\x9c\xfb\x1d\x9e[\x1f\x04\x81\x8a\xeb\xc3{Y\xfaI\x0c\xd9Doi\xea'
 
 
-#MONGO_URI = 'mongodb://admin:YT%26%21b4aUYH@cluster0-shard-00-00-juobo.mongodb.net:27017,cluster0-shard-00-01-juobo.mongodb.net:27017,cluster0-shard-00-02-juobo.mongodb.net:27017/peopledir?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin'
+MONGO_URI = 'mongodb://admin:YT%26%21b4aUYH@cluster0-shard-00-00-juobo.mongodb.net:27017,cluster0-shard-00-01-juobo.mongodb.net:27017,cluster0-shard-00-02-juobo.mongodb.net:27017/peopledir?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin'
 #MONGO_URI = 'mongodb://admin:Qwerty@10.131.35.106:27017,/peopledir?authSource=admin'
-MONGO_URI = os.environ['OPENSHIFT_NOSQL_DB_URL']
+#MONGO_URI = os.environ['OPENSHIFT_NOSQL_DB_URL']
 
 app.config['MONGO_URI'] = MONGO_URI
 
@@ -35,7 +35,7 @@ def hello(username=None):
 @app.route("/people/")	
 def people():
     people = mongo.db.people.find()
-    resp = make_response(render_template('people.html', people = people))
+    resp = make_response(render_template('people.html', people = enumerate(people)))
     return resp
 
 @app.route("/people/generate")    
@@ -77,20 +77,19 @@ def remove_by_id(id):
 def update_person(id = None, lname = None, fname = None):
 
     filter = {'_id': ObjectId(id)}
-    
+ 
     update = {}
     if fname:
         update['fname'] = fname
     if lname:
         update['lname'] = lname
         
-    pprint({'$set':update})    
-        
     result = mongo.db.people.update_one(filter, {'$set': update})    
     
     print("Modified: " + str(result.modified_count))
     
     return redirect(url_for('people'))
-    
+
+ 
 if __name__ == "__main__":
     app.run()

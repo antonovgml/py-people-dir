@@ -15,11 +15,11 @@
 		<th>Date of Birth</th>
 		<th>ID</th>
 	<tr>
-	{% for idx,person in enumerate(people) %}
+	{% for idx, person in people %}
 	<tr>
 		<td>
-			{{idx}}
-		</td>
+			{{ idx + 1 }}
+		</td>	
 		<td>
 			{{ person.lname }}, {{ person['fname'] }}
 		</td>
